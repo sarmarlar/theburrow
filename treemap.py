@@ -1,5 +1,4 @@
-# CS 121: Drawing TreeMaps
-# Sarah Larson
+
 
 import sys
 import csv
@@ -161,14 +160,14 @@ def draw_treemap(t,
                 c.draw_text_vertical(x0+w/2.0, y0+h/2.0, h*0.95, str(label), fg="black")
 
 
-    ### START: DO NOT CHANGE THIS CODE ###
+   
     # save or show the result.
     if output_filename:
         print("saving...", output_filename)
         c.savefig(output_filename)
     else:
         c.show()
-    ### END: DO NOT CHANGE THIS CODE ###
+   
 
 
 
