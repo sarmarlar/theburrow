@@ -1,0 +1,183 @@
+from util import sort_count_pairs
+
+
+
+def find_top_k(items, k):
+
+    '''
+
+    Find the K most frequently occuring items
+
+
+
+    Inputs:
+
+        items: a list of items
+
+        k: integer 
+
+
+
+    Returns: sorted list of K tuples
+
+
+
+    '''
+
+
+
+    counter_dictionary = {}
+
+    pairs = []
+
+
+
+    for i in items:
+
+        counter_dictionary[i] = counter_dictionary.get(i,0) + 1
+
+
+
+    for key, value in counter_dictionary.items():
+
+        pairs.append((key, value))
+
+    
+
+    sorted_pairs = sort_count_pairs(pairs)
+
+    del sorted_pairs[k:]
+
+
+
+    return sorted_pairs
+
+
+
+
+
+def find_min_count(items, min_count):
+
+    '''
+
+    Find the items that occur at least min_count times
+
+
+
+    Inputs:
+
+        items: a list of items    
+
+        min_count: integer
+
+        
+
+    Returns: sorted list of tuples
+
+    '''
+
+
+
+    counter_dictionary = {}
+
+    pairs = []
+
+    min_count_pairs = []
+
+
+
+    for i in items:
+
+        counter_dictionary[i] = counter_dictionary.get(i,0) + 1
+
+    
+
+    for key, value in counter_dictionary.items():
+
+        pairs.append((key, value))
+
+
+
+    sorted_pairs = sort_count_pairs(pairs) 
+
+    for i in range(len(sorted_pairs)):
+
+        if sorted_pairs[i][1] < min_count:
+
+            del sorted_pairs[i:]
+
+            break
+
+
+
+    return sorted_pairs
+
+     
+
+
+
+def find_frequent(items, k):
+
+    '''
+
+    Find items where the number of times the item occurs is at least
+
+    fraction * len(items).
+
+
+
+    Input: 
+
+        items: list of items
+
+        k: integer
+
+
+
+    Return: sorted list of tuples
+
+
+
+    '''
+
+        
+
+    D = {}
+
+    pairs = []
+
+    
+
+    for item in items:
+
+        if item in D: 
+
+            D[item] = D[item] + 1
+
+        if item not in D:
+
+            if len(D) < (k-1):
+
+                D[item] = 1
+
+            else:
+
+                for existing_item in D:
+
+                    D[existing_item] = D[existing_item] - 1
+
+                D = {k:v for k, v in D.items() if v > 0}
+
+
+
+    for key, value in D.items():
+
+        pairs.append((key, value))
+
+
+
+    sorted_pairs = sort_count_pairs(pairs) 
+
+
+
+    return sorted_pairs  
