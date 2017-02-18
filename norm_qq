@@ -1,0 +1,81 @@
+require(mosaic)
+mpgData <- read.csv("mpgdata.csv")
+str(mpgData)
+hist(mpgData$mpg)
+head(mpgData)
+hist(mpgData$mpg,main="MPG Data Distribution",xlab="Miles Per Gallon")
+m=mean(mpgData$mpg)
+m
+zvector <- numeric(1000)
+for(i in 1:1000){
+  p=sample(mpgData$mpg,replace=T)
+  mp=mean(p)
+  z <- (mp-m)/0.7826
+  zvector[i] <- z
+}
+hist(zvector,main="Sampling Distribution", xlab="sample averages")
+qqnorm(zvector)
+
+
+require(mosaic)
+fbData <-read.csv("hw 8 data fb.csv")
+str(fbData)
+head(fbData)
+hist(fbData$friends)
+
+hist(fbData$friends,main="Facebook Friends Data Distribution",xlab="Friends")
+m=mean(fbData$friends)
+m
+s <- sd(fbData$friends)
+s
+
+zvector <- numeric(1000)
+for(i in 1:1000){
+  p=sample(fbData$friends,replace=T)
+  mp=mean(p)
+  z <- (mp-m)/(s/sqrt(30))
+  zvector[i] <- z
+}
+hist(zvector,main="Sampling Distribution", xlab="sample averages")
+qqnorm(zvector)
+
+
+require(mosaic)
+
+str(saddata)
+saddata <- read.csv("sadness.csv")
+saddata$group <- factor(saddata$group, levels = c("Sad","Neutral"))
+str(saddata)
+favstats(price~group,data=saddata)
+t.test(price~group,data=saddata)
+neutral <- saddata$price[saddata$group == "Neutral"]
+hist(neutral,xlab = "purchase price ($)")
+sad <- saddata$price[saddata$group == "Sad"]
+hist(sad,xlab = "purchase price ($)")
+mn=mean(neutral)
+mn
+sn=sd(neutral)
+sn
+zvector <- numeric(1000)
+for(i in 1:1000){
+  p=sample(neutral,replace=T)
+  mp=mean(p)
+  z <- (mp-mn)/(sn/sqrt(14))
+  zvector[i] <- z
+}
+hist(zvector,main="Neutral Sampling Distribution", xlab="sample averages")
+qqnorm(zvector)
+ms=mean(sad)
+ms
+ss=sd(sad)
+ss
+zvector <- numeric(1000)
+for(i in 1:1000){
+  ps=sample(neutral,replace=T)
+  mps=mean(ps)
+  z <- (mps-ms)/(ss/sqrt(17))
+  zvector[i] <- z
+}
+hist(zvector,main="Sad Sampling Distribution", xlab="sample averages")
+qqnorm(zvector)
+
