@@ -1,0 +1,41 @@
+1-pchisq(20.73,2)
+datatable <- c(89,82,123,115,100,91)
+datatable
+csfit <- chisq.test(datatable)
+str(csfit, give.head=FALSE, give.attr=FALSE)
+df(datatable)
+1-pchisq(8.3,5)
+datatable2 <- c(114,92,108,101,85)
+datatable2
+1-pchisq(5.5,4)
+mysample <- runif(500)
+cutoffs <- seq(from=0, to=1, by=.2)
+cutoffs
+mycount <- table(cut(mysample,cutoffs))
+mycount
+expcount <- rep(100,5)
+expcount
+mystat <- sum((mycount-expcount)^2/expcount)
+mystat
+pvalue <- 1-pchisq(mystat, df=4)
+pvalue
+pvalues <- numeric(1000)
+for (i in 1:1000) {
+  mysample <- runif(500)
+  cutoffs <- seq(from=0, to=1, by=.2)
+  cutoffs
+  mycount <- table(cut(mysample,cutoffs))
+  mycount
+  expcount <- rep(100,5)
+  expcount
+  mystat <- sum((mycount-expcount)^2/expcount)
+  mystat
+  pvalue <- 1-pchisq(mystat, df=4)
+  pvalues[i]<-pvalue
+}
+favstats(pvalues)
+hist(pvalues, main="P-Values",xlab="p-value")
+qqnorm(pvalues)
+length(which(pvalues<.05))
+length(which(pvalues<.01))
+
