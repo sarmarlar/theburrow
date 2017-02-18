@@ -1,0 +1,213 @@
+from model import *
+
+
+
+# defined constants for the city data
+
+PREDICTOR_VAR_INDICES = list(range(0, 7))
+
+DEPENDENT_VAR_INDEX = 7 
+
+FILENAME = 'data/city/training.csv'
+
+TESTING_FILENAME = 'data/city/testing.csv'
+
+
+
+
+
+if __name__ == "__main__":
+
+
+
+    labels, data_array = read_file(FILENAME)
+
+
+
+    print ("CITY Task 1a: ")
+
+
+
+    for i in PREDICTOR_VAR_INDICES: 
+
+        my_data = model_data(labels, data_array, [i], DEPENDENT_VAR_INDEX)
+
+        X = my_data[0]
+
+        y = my_data[1]
+
+        R_squared = Calc_R_squared(X, y)[0]
+
+        print(labels[i],":", "{0:.2f}".format(R_squared))
+
+
+
+    print()
+
+    print("CITY Task 1b: ")
+
+
+
+    my_data = model_data(labels, data_array, PREDICTOR_VAR_INDICES, DEPENDENT_VAR_INDEX)
+
+    X = my_data[0]
+
+    y = my_data[1]
+
+    R_squared = Calc_R_squared(X, y)[0]
+
+    print (', '.join(labels), "R2:", "{0:.2f}".format(R_squared))
+
+
+
+    print()
+
+    print("CITY Task 2: ")
+
+
+
+    k = len(PREDICTOR_VAR_INDICES)
+
+    R_squared = 0
+
+    top_predictors = (0, 0)
+
+
+
+    for i in PREDICTOR_VAR_INDICES: 
+
+        for j in range(i+1, k):
+
+            my_data = model_data(labels, data_array, [i,j], DEPENDENT_VAR_INDEX)   
+
+            X = my_data[0]
+
+            y = my_data[1]
+
+            new_R_squared = Calc_R_squared(X, y)[0]
+
+            if new_R_squared > R_squared:
+
+                R_squared = new_R_squared 
+
+                top_predictors = (labels[i], labels[j])
+
+
+
+    print(', '.join(top_predictors), "R2:", "{0:.2f}".format(R_squared))
+
+
+
+    print()
+
+    print("CITY Task 3a: ")
+
+
+
+    fixed_k_model = fixed_k_model(labels, data_array, PREDICTOR_VAR_INDICES, DEPENDENT_VAR_INDEX)
+
+
+
+    k_labels = []
+
+
+
+    for i in fixed_k_model[0]:
+
+        current_index = fixed_k_model[0].index(i)
+
+        R2 = fixed_k_model[1][current_index]
+
+        best_label = labels[i]
+
+        k_labels.append(best_label)
+
+        print(', '.join(k_labels), "R2:", "{0:.2f}".format(R2))
+
+
+
+    print()
+
+    print("CITY Task 3b:")
+
+
+
+    threshold_01 = select_best_k(labels, data_array, PREDICTOR_VAR_INDICES, DEPENDENT_VAR_INDEX, 0.1)
+
+    index = threshold_01[0]
+
+    label = (labels[fixed_k_model[0][index]])
+
+    R2 = threshold_01[1]
+
+    print("Threshold 0.1:", label, "R2:", "{0:.2f}".format(R2))
+
+
+
+    print()
+
+
+
+    threshold_001 = (select_best_k(labels, data_array, PREDICTOR_VAR_INDICES, DEPENDENT_VAR_INDEX, 0.01))
+
+    label_list = []
+
+    for i in range(threshold_001[0] + 1):
+
+        index = fixed_k_model[0][i]
+
+        label_list.append(labels[index])
+
+    R2 = threshold_001[1]
+
+    print ("Threshold 0.01:", ', '.join(label_list), "R2:", "{0:.2f}".format(R2))
+
+
+
+
+
+
+
+
+
+    test_labels, test_data_array = read_file(TESTING_FILENAME)
+
+
+
+    print()
+
+    print("CITY Task 4:")
+
+
+
+    #similar structure as in task 3a, 
+
+    #except call Calc_R_squared_testing, which calculates the R squared value such that 
+
+    #beta is computed with the training data and yhat is computed with the testing data. 
+
+
+
+    k_labels = []
+
+
+
+    testing_X_array = model_data(test_labels, test_data_array, PREDICTOR_VAR_INDICES, DEPENDENT_VAR_INDEX) 
+
+    training_bet_set = fixed_k_model(labels, data_array, PREDICTOR_VAR_INDICES, DEPENDENT_VAR_INDEX)[2]
+
+    testing_yhat_model = apply_beta(training_beta_set, testing_X_array)
+
+
+
+    for i in fixed_k_model[0]:
+
+        current_index = fixed_k_model[0].index(i)
+
+        R2 = Calc_R_squared_testing(my_data[0], testing_X_array, my_data[1])
+
+        best_label = labels[i]
+
+        k_labels.append(best_label)
+
+        print(', '.join(k_labels), "R2:", "{0:.2f}".format(R2))
